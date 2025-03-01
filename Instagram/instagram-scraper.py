@@ -58,18 +58,21 @@ class InstagramScraper:
     def login(self):
         """Faz login no Instagram"""
         try:
+            print("Abrindo o Instagram...")
             self.driver.get("https://www.instagram.com/")
             time.sleep(3)  # Aguardar carregamento da página
             
             # Aceitar cookies se o diálogo aparecer
             try:
+                print("Tentando aceitar cookies...")
                 cookie_button = self.driver.find_element(By.XPATH, "//button[contains(text(), 'Accept') or contains(text(), 'Allow')]")
                 cookie_button.click()
                 time.sleep(1)
-            except:
-                pass
+            except Exception as e:
+                print(f"Erro ao aceitar cookies: {e}")
             
             # Preencher campos de login
+            print("Preenchendo campos de login...")
             username_field = self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
             password_field = self.wait.until(EC.presence_of_element_located((By.NAME, "password")))
             
@@ -77,6 +80,7 @@ class InstagramScraper:
             password_field.send_keys(self.password)
             
             # Clicar no botão de login
+            print("Clicando no botão de login...")
             login_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@type='submit']")))
             login_button.click()
             
@@ -85,17 +89,18 @@ class InstagramScraper:
             
             # Lidar com pop-ups pós-login
             try:
+                print("Lidando com pop-ups pós-login...")
                 not_now_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Not Now')]")))
                 not_now_button.click()
                 time.sleep(2)
-            except:
-                pass
+            except Exception as e:
+                print(f"Erro ao lidar com pop-ups: {e}")
                 
             try:
                 another_not_now = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Not Now')]")))
                 another_not_now.click()
-            except:
-                pass
+            except Exception as e:
+                print(f"Erro ao lidar com outro pop-up: {e}")
                 
             print("Login realizado com sucesso!")
             return True
